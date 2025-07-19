@@ -221,7 +221,26 @@ jobs:
           cd python
           python setup.py bdist_wheel --plat-name=${{matrix.plat-name}}
 
+      - name: Test Package on Linux and macOS
+        if: ${{ success() && runner.os != 'Windows' }}
+        shell: bash
+        run: |
+          cd python
+          python -m venv venv
+          source venv/bin/activate
+          pip install -e .[test]
+          pytest ilivalidator
+        shell: bash
 
+      - name: Test package on Windows
+        if: ${{ success() && runner.os == 'Windows' }}
+        shell: bash
+        run: |
+          cd python
+          python -m venv venv
+          venv\Scripts\Activate.ps1
+          pip install -e .[test]
+          pytest ilivalidator
 
 
 

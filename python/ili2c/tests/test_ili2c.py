@@ -9,19 +9,14 @@ def test_create_ilismetas16_ok():
     with tempfile.TemporaryDirectory() as tmpdir:
         print("Temp dir path:", tmpdir)
         xtf_file = os.path.join(tmpdir, 'SO_ARP_SEin_Konfiguration_20250116.xtf')
-        try:
-            result = Ili2c.create_ilismetas16(TEST_DATA_PATH+"SO_ARP_SEin_Konfiguration_20250116.ili", xtf_file)
-            assert result == True
+        result = Ili2c.create_ilismetas16(TEST_DATA_PATH+"SO_ARP_SEin_Konfiguration_20250116.ili", xtf_file)
+        assert result == True
 
-            with open(xtf_file, 'r', encoding='utf-8') as f:
-                file_content = f.read()
+        with open(xtf_file, 'r', encoding='utf-8') as f:
+            file_content = f.read()
 
-            search_str = '<IlisMeta16:Role ili:tid="SO_ARP_SEin_Konfiguration_20250115.Grundlagen.Thema_Objektinfo.Thema_R">'
-            assert search_str in file_content
-        finally:
-            # Make sure the log file is explicitly closed and handled before cleanup
-            if os.path.exists(log_file):
-                os.remove(log_file)
+        search_str = '<IlisMeta16:Role ili:tid="SO_ARP_SEin_Konfiguration_20250115.Grundlagen.Thema_Objektinfo.Thema_R">'
+        assert search_str in file_content
 
 def test_compile_model_ok():
     with tempfile.TemporaryDirectory() as tmpdir:

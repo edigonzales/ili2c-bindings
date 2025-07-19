@@ -221,6 +221,12 @@ jobs:
           cd python
           python setup.py bdist_wheel --plat-name=${{matrix.plat-name}}
 
+      - name: Copy native library
+        shell: bash
+        run: |
+          mkdir -p python/lib_ext
+          cp java-lib/build/native/nativeCompile/* lib_ext/
+
       - name: Test Package on Linux and macOS
         if: ${{ success() && runner.os != 'Windows' }}
         shell: bash

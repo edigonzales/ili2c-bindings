@@ -59,6 +59,5 @@ print(result)
 
 # Generate model as IlisMeta16 INTERLIS transfer
 from ili2c import Ili2c
-xtf_file = os.path.join(tmpdir, 'Test1.xtf')
-result = Ili2c.create_ilismetas16("test/Test1.ili", xtf_file)
+result = Ili2c.create_ilismetas16("test/Test1.ili", 'Test1.xtf')
 ```

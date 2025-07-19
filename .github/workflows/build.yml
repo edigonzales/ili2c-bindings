@@ -138,7 +138,7 @@ jobs:
         shell: bash
         run: |
           cd nodejs/prebuilds/${{matrix.plat-name}}/node
-          install_name_tool -change /Users/runner/work/ili2c-node/ili2c-node/java-lib/build/native/nativeCompile/libili2c.dylib @loader_path/../libili2c.dylib ili2c.node
+          install_name_tool -change /Users/runner/work/ili2c-bindings/ili2c-bindings/java-lib/build/native/nativeCompile/libili2c.dylib @loader_path/../libili2c.dylib ili2c.node
           otool -L ili2c.node
 
       - name: Build electron module
@@ -162,7 +162,7 @@ jobs:
         shell: bash
         run: |
           cd nodejs/prebuilds/${{matrix.plat-name}}/electron
-          install_name_tool -change /Users/runner/work/ili2c-node/ili2c-node/java-lib/build/native/nativeCompile/libili2c.dylib @loader_path/../libili2c.dylib ili2c.node
+          install_name_tool -change /Users/runner/work/ili2c-bindings/ili2c-bindings/java-lib/build/native/nativeCompile/libili2c.dylib @loader_path/../libili2c.dylib ili2c.node
           otool -L ili2c.node
 
       - name: Test node module
@@ -293,10 +293,10 @@ jobs:
           rm binding.gyp
           rm -rf src
           mkdir -p prebuilds
-          cp -r /home/runner/work/ili2c-node/ili2c-node/artifacts/nodejs-prebuild-darwin-arm64/* ./prebuilds
-          cp -r /home/runner/work/ili2c-node/ili2c-node/artifacts/nodejs-prebuild-darwin-x64/* ./prebuilds
-          cp -r /home/runner/work/ili2c-node/ili2c-node/artifacts/nodejs-prebuild-linux-x64/* ./prebuilds
-          cp -r /home/runner/work/ili2c-node/ili2c-node/artifacts/nodejs-prebuild-win32-x64/* ./prebuilds
+          cp -r /home/runner/work/ili2c-bindings/ili2c-bindings/artifacts/nodejs-prebuild-darwin-arm64/* ./prebuilds
+          cp -r /home/runner/work/ili2c-bindings/ili2c-bindings/artifacts/nodejs-prebuild-darwin-x64/* ./prebuilds
+          cp -r /home/runner/work/ili2c-bindings/ili2c-bindings/artifacts/nodejs-prebuild-linux-x64/* ./prebuilds
+          cp -r /home/runner/work/ili2c-bindings/ili2c-bindings/artifacts/nodejs-prebuild-win32-x64/* ./prebuilds
           ls -la ./prebuilds/
           ls -la ./prebuilds/darwin-arm64
 
@@ -366,10 +366,10 @@ jobs:
           set -e
           cd python
           mkdir dist
-          cp -r /home/runner/work/ili2c-node/ili2c-node/artifacts/python-manylinux2014_x86_64/* ./dist
-          cp -r /home/runner/work/ili2c-node/ili2c-node/artifacts/python-macosx_14_0_arm64/* ./dist
-          cp -r /home/runner/work/ili2c-node/ili2c-node/artifacts/python-macosx_13_0_x86_64/* ./dist
-          cp -r /home/runner/work/ili2c-node/ili2c-node/artifacts/python-win_amd64/* ./dist
+          cp -r /home/runner/work/ili2c-bindings/ili2c-bindings/artifacts/python-manylinux2014_x86_64/* ./dist
+          cp -r /home/runner/work/ili2c-bindings/ili2c-bindings/artifacts/python-macosx_14_0_arm64/* ./dist
+          cp -r /home/runner/work/ili2c-bindings/ili2c-bindings/artifacts/python-macosx_13_0_x86_64/* ./dist
+          cp -r /home/runner/work/ili2c-bindings/ili2c-bindings/artifacts/python-win_amd64/* ./dist
           ls -la ./dist
 
       - name: Publish package to PyPI

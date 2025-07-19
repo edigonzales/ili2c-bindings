@@ -51,6 +51,14 @@ jobs:
           ./gradlew clean nativeCompile
           ls -la build/native/nativeCompile/
 
+      - name: Debug
+        if: always() && runner.os == 'Linux'      
+        shell: bash
+        run: |
+          cd java-lib
+          cd build/native/nativeCompile/
+          ldd libili2c.so
+
       - uses: actions/upload-artifact@v4
         if: ${{ failure() }}
         with:
@@ -212,6 +220,7 @@ jobs:
         run: python -m pip install --upgrade setuptools wheel
 
       - name: Build Python source package
+        if: always() && runner.os == 'Linux'      
         shell: bash
         run: |
           cd python

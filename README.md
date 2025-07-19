@@ -12,11 +12,19 @@ The repository is organized into three main directories:
 - `nodejs/`: Contains the Node.js bindings for the native shared library.
 - `python/`: Contains the Python bindings for the native shared library.
 
+## Dependencies
+
+The native shared library still relies on libc but should work on most (debian/ubuntu) Linux systems, macOS and Windows out of the box.
+
 ## Usage Examples
 
 ### Node.js Examples
 
 Here are basic examples of how to use the ili2c compiler via the Node.js bindings:
+
+```bash
+npm install ili2c
+```
 
 ```javascript
 // Compile model
@@ -34,10 +42,14 @@ console.log(result);
 
 Here are basic examples of how to use the ili2c compiler via the Python bindings:
 
+```bash
+pip install ili2c
+```
+
 ```python
 # Compile model
 from ili2c import Ili2c
-result = Ili2c.compile_model("test/Test1.ili", log_file)
+result = Ili2c.compile_model("test/Test1.ili", "ili2c.log")
 print(result)
 
 # Pretty print model

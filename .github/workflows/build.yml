@@ -72,110 +72,110 @@ jobs:
           path: java-lib/build/native/nativeCompile/
 
   # Stage 2: Build Node.js bindings
-  # build-nodejs:
-  #   name: 'Build Node.js bindings on ${{ matrix.os }}'
-  #   needs: build-native
-  #   strategy:
-  #     fail-fast: true
-  #     matrix:
-  #       os: [ macos-14, macos-13, ubuntu-24.04, windows-2022 ]
-  #       # os: [ macos-14 ]
-  #       include:
-  #         - os: 'macos-14'
-  #           plat-name: 'darwin-arm64'
-  #         - os: 'macos-13'
-  #           plat-name: 'darwin-x64'
-  #         - os: 'ubuntu-24.04'
-  #           plat-name: 'linux-x64'
-  #         - os: 'windows-2022'
-  #           plat-name: 'win32-x64'
+  build-nodejs:
+    name: 'Build Node.js bindings on ${{ matrix.os }}'
+    needs: build-native
+    strategy:
+      fail-fast: true
+      matrix:
+        os: [ macos-14, macos-13, ubuntu-24.04, windows-2022 ]
+        # os: [ macos-14 ]
+        include:
+          - os: 'macos-14'
+            plat-name: 'darwin-arm64'
+          - os: 'macos-13'
+            plat-name: 'darwin-x64'
+          - os: 'ubuntu-24.04'
+            plat-name: 'linux-x64'
+          - os: 'windows-2022'
+            plat-name: 'win32-x64'
 
-  #   runs-on: ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
 
-  #   steps:
-  #     - uses: actions/checkout@v4
+    steps:
+      - uses: actions/checkout@v4
 
-  #     - name: Download native library
-  #       uses: actions/download-artifact@v4
-  #       with:
-  #         name: native-lib-${{ matrix.plat-name }}
-  #         path: nodejs/lib_ext/${{ matrix.plat-name }}
+      - name: Download native library
+        uses: actions/download-artifact@v4
+        with:
+          name: native-lib-${{ matrix.plat-name }}
+          path: nodejs/lib_ext/${{ matrix.plat-name }}
 
-  #     - name: 'Debug'
-  #       shell: bash
-  #       run: |
-  #         ls -la ./nodejs/lib_ext
-  #         ls -la ./nodejs/lib_ext/${{ matrix.plat-name }}
+      - name: 'Debug'
+        shell: bash
+        run: |
+          ls -la ./nodejs/lib_ext
+          ls -la ./nodejs/lib_ext/${{ matrix.plat-name }}
 
-  #     - uses: actions/setup-node@v4
-  #       with:
-  #         node-version: '22.x'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
 
-  #     - name: Ensure distutils for Python
-  #       shell: bash
-  #       run: |
-  #         python3 -m venv .venv
-  #         if [[ "$RUNNER_OS" == "Windows" ]]; then
-  #           source .venv/Scripts/activate
-  #         else
-  #           source .venv/bin/activate
-  #         fi          
-  #         pip install setuptools
+      - name: Ensure distutils for Python
+        shell: bash
+        run: |
+          python3 -m venv .venv
+          if [[ "$RUNNER_OS" == "Windows" ]]; then
+            source .venv/Scripts/activate
+          else
+            source .venv/bin/activate
+          fi          
+          pip install setuptools
 
-  #     - name: Build node module
-  #       shell: bash
-  #       run: |
-  #         cd nodejs
-  #         ls -la lib_ext
-  #         npm ci
-  #         npx prebuildify --napi --strip --target 22.0.0
-  #         mkdir -p prebuilds/${{matrix.plat-name}}/node 
-  #         mv prebuilds/${{matrix.plat-name}}/ili2c.node prebuilds/${{matrix.plat-name}}/node/
-  #         ls -la prebuilds/${{matrix.plat-name}}/node/
+      - name: Build node module
+        shell: bash
+        run: |
+          cd nodejs
+          ls -la lib_ext
+          npm ci
+          npx prebuildify --napi --strip --target 22.0.0
+          mkdir -p prebuilds/${{matrix.plat-name}}/node 
+          mv prebuilds/${{matrix.plat-name}}/ili2c.node prebuilds/${{matrix.plat-name}}/node/
+          ls -la prebuilds/${{matrix.plat-name}}/node/
 
-  #     - name: 'Fix dylib look up (node)'
-  #       if: ${{ runner.os == 'macOS' }}
-  #       shell: bash
-  #       run: |
-  #         cd nodejs/prebuilds/${{matrix.plat-name}}/node
-  #         install_name_tool -change /Users/runner/work/ili2c-node/ili2c-node/java-lib/build/native/nativeCompile/libili2c.dylib @loader_path/../libili2c.dylib ili2c.node
-  #         otool -L ili2c.node
+      - name: 'Fix dylib look up (node)'
+        if: ${{ runner.os == 'macOS' }}
+        shell: bash
+        run: |
+          cd nodejs/prebuilds/${{matrix.plat-name}}/node
+          install_name_tool -change /Users/runner/work/ili2c-node/ili2c-node/java-lib/build/native/nativeCompile/libili2c.dylib @loader_path/../libili2c.dylib ili2c.node
+          otool -L ili2c.node
 
-  #     - name: Build electron module
-  #       id: buildElectronModule
-  #       shell: bash
-  #       run: |
-  #         if [[ "$RUNNER_OS" == "Windows" ]]; then
-  #           source .venv/Scripts/activate
-  #         else
-  #           source .venv/bin/activate
-  #         fi          
-  #         cd nodejs
-  #         mkdir -p prebuilds/${{matrix.plat-name}}/electron 
-  #         npm install --save-dev electron-rebuild
-  #         npx electron-rebuild --force --parallel --disable-logging -v 35.5.1
-  #         cp build/Release/ili2caddon.node prebuilds/${{matrix.plat-name}}/electron/ili2c.node
-  #         ls -la prebuilds/${{matrix.plat-name}}/electron/
+      - name: Build electron module
+        id: buildElectronModule
+        shell: bash
+        run: |
+          if [[ "$RUNNER_OS" == "Windows" ]]; then
+            source .venv/Scripts/activate
+          else
+            source .venv/bin/activate
+          fi          
+          cd nodejs
+          mkdir -p prebuilds/${{matrix.plat-name}}/electron 
+          npm install --save-dev electron-rebuild
+          npx electron-rebuild --force --parallel --disable-logging -v 35.5.1
+          cp build/Release/ili2caddon.node prebuilds/${{matrix.plat-name}}/electron/ili2c.node
+          ls -la prebuilds/${{matrix.plat-name}}/electron/
 
-  #     - name: 'Fix dylib look up (electron)'
-  #       if: ${{ runner.os == 'macOS' }}
-  #       shell: bash
-  #       run: |
-  #         cd nodejs/prebuilds/${{matrix.plat-name}}/electron
-  #         install_name_tool -change /Users/runner/work/ili2c-node/ili2c-node/java-lib/build/native/nativeCompile/libili2c.dylib @loader_path/../libili2c.dylib ili2c.node
-  #         otool -L ili2c.node
+      - name: 'Fix dylib look up (electron)'
+        if: ${{ runner.os == 'macOS' }}
+        shell: bash
+        run: |
+          cd nodejs/prebuilds/${{matrix.plat-name}}/electron
+          install_name_tool -change /Users/runner/work/ili2c-node/ili2c-node/java-lib/build/native/nativeCompile/libili2c.dylib @loader_path/../libili2c.dylib ili2c.node
+          otool -L ili2c.node
 
-  #     - name: Test node module
-  #       shell: bash
-  #       run: |
-  #         cd nodejs
-  #         node test.js
+      - name: Test node module
+        shell: bash
+        run: |
+          cd nodejs
+          node test.js
 
-  #     - name: 'Upload Node.js build artifact'
-  #       uses: actions/upload-artifact@v4
-  #       with:
-  #         name: nodejs-prebuild-${{matrix.plat-name}}
-  #         path: nodejs/prebuilds/**
+      - name: 'Upload Node.js build artifact'
+        uses: actions/upload-artifact@v4
+        with:
+          name: nodejs-prebuild-${{matrix.plat-name}}
+          path: nodejs/prebuilds/**
 
   # Stage 3: Build Python bindings
   build-python:
@@ -268,79 +268,79 @@ jobs:
             python/dist/
 
   # Stage 4: Publish Node.js package
-  # publish-nodejs:
-  #   name: Publish Node.js package to npm
-  #   needs: build-nodejs
-  #   runs-on: ubuntu-latest
-  #   permissions:
-  #     contents: write
+  publish-nodejs:
+    name: Publish Node.js package to npm
+    needs: build-nodejs
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
-  #   steps:
-  #     - name: Checkout repository
-  #       uses: actions/checkout@v4
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-  #     - name: Download Node.js prebuild artifacts
-  #       uses: actions/download-artifact@v4
-  #       with:
-  #         pattern: nodejs-prebuild-*
-  #         path: ./artifacts
+      - name: Download Node.js prebuild artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: nodejs-prebuild-*
+          path: ./artifacts
 
-  #     - name: Merge prebuilds into package folder
-  #       shell: bash
-  #       run: |
-  #         set -e
-  #         cd nodejs
-  #         rm binding.gyp
-  #         rm -rf src
-  #         mkdir -p prebuilds
-  #         cp -r /home/runner/work/ili2c-node/ili2c-node/artifacts/nodejs-prebuild-darwin-arm64/* ./prebuilds
-  #         cp -r /home/runner/work/ili2c-node/ili2c-node/artifacts/nodejs-prebuild-darwin-x64/* ./prebuilds
-  #         cp -r /home/runner/work/ili2c-node/ili2c-node/artifacts/nodejs-prebuild-linux-x64/* ./prebuilds
-  #         cp -r /home/runner/work/ili2c-node/ili2c-node/artifacts/nodejs-prebuild-win32-x64/* ./prebuilds
-  #         ls -la ./prebuilds/
-  #         ls -la ./prebuilds/darwin-arm64
+      - name: Merge prebuilds into package folder
+        shell: bash
+        run: |
+          set -e
+          cd nodejs
+          rm binding.gyp
+          rm -rf src
+          mkdir -p prebuilds
+          cp -r /home/runner/work/ili2c-node/ili2c-node/artifacts/nodejs-prebuild-darwin-arm64/* ./prebuilds
+          cp -r /home/runner/work/ili2c-node/ili2c-node/artifacts/nodejs-prebuild-darwin-x64/* ./prebuilds
+          cp -r /home/runner/work/ili2c-node/ili2c-node/artifacts/nodejs-prebuild-linux-x64/* ./prebuilds
+          cp -r /home/runner/work/ili2c-node/ili2c-node/artifacts/nodejs-prebuild-win32-x64/* ./prebuilds
+          ls -la ./prebuilds/
+          ls -la ./prebuilds/darwin-arm64
 
-  #     - name: List resulting prebuilds
-  #       shell: bash
-  #       run: |
-  #         cd nodejs
-  #         echo "=== prebuilds ==="
-  #         find prebuilds -type f | sort
+      - name: List resulting prebuilds
+        shell: bash
+        run: |
+          cd nodejs
+          echo "=== prebuilds ==="
+          find prebuilds -type f | sort
 
-  #     - uses: actions/setup-node@v4
-  #       with:
-  #         node-version: '22.x'
-  #         registry-url: "https://registry.npmjs.org"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          registry-url: "https://registry.npmjs.org"
 
-  #     - name: 'Create local package (just for debugging)'
-  #       shell: bash
-  #       run: |
-  #         cd nodejs
-  #         npm pack
-  #         ls -la
+      - name: 'Create local package (just for debugging)'
+        shell: bash
+        run: |
+          cd nodejs
+          npm pack
+          ls -la
 
-  #     - name: Authenticate with npm
-  #       run: npm config set //registry.npmjs.org/:_authToken ${{ secrets.NPM_TOKEN }}
+      - name: Authenticate with npm
+        run: npm config set //registry.npmjs.org/:_authToken ${{ secrets.NPM_TOKEN }}
 
-  #     - name: Bump version
-  #       run: |
-  #         cd nodejs
-  #         git config user.name "github-actions[bot]"
-  #         git config user.email "github-actions[bot]@users.noreply.github.com"
-  #         npm version patch --no-git-tag-version
-  #         git add package.json package-lock.json
-  #         git commit -m "chore(release): bump version"
-  #         git tag v$(node -p "require('./package.json').version")
-  #         git push origin HEAD
-  #         git push origin --tags
+      - name: Bump version
+        run: |
+          cd nodejs
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          npm version patch --no-git-tag-version
+          git add package.json package-lock.json
+          git commit -m "chore(release): bump version"
+          git tag v$(node -p "require('./package.json').version")
+          git push origin HEAD
+          git push origin --tags
 
-  #     - name: Publish to npm
-  #       shell: bash
-  #       run: | 
-  #         cd nodejs
-  #         npm publish
-  #       env:
-  #         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Publish to npm
+        shell: bash
+        run: | 
+          cd nodejs
+          npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
   # Stage 5: Publish Python package
   publish-python:
@@ -375,8 +375,8 @@ jobs:
       - name: Publish package to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
-          #password: ${{ secrets.PYPI_API_TOKEN }}
-          password: ${{ secrets.PYPI_TEST_API_TOKEN }}
-          repository_url: https://test.pypi.org/legacy/
+          password: ${{ secrets.PYPI_API_TOKEN }}
+          #password: ${{ secrets.PYPI_TEST_API_TOKEN }}
+          #repository_url: https://test.pypi.org/legacy/
           packages_dir: python/dist/
           verbose: true

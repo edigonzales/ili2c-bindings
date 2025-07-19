@@ -24,3 +24,31 @@ class Ili2c:
             return result == 0
         finally:
             dll.graal_tear_down_isolate(isolatethread)
+
+    @staticmethod
+    def compile_model(iliFile: str, logFile: str) -> bool:
+        lib_path = files('ili2c.lib_ext').joinpath(lib_name)
+        dll = CDLL(str(lib_path))
+        isolate = c_void_p()
+        isolatethread = c_void_p()
+        dll.graal_create_isolate(None, byref(isolate), byref(isolatethread))
+
+        try:
+            result = dll.compileModel(isolatethread, c_char_p(bytes(iliFile, "utf8")), c_char_p(bytes(logFile, "utf8")))
+            return result == 0
+        finally:
+            dll.graal_tear_down_isolate(isolatethread)
+
+    @staticmethod
+    def pretty_print(iliFile: str) -> bool:
+        lib_path = files('ili2c.lib_ext').joinpath(lib_name)
+        dll = CDLL(str(lib_path))
+        isolate = c_void_p()
+        isolatethread = c_void_p()
+        dll.graal_create_isolate(None, byref(isolate), byref(isolatethread))
+
+        try:
+            result = dll.prettyPrint(isolatethread, c_char_p(bytes(iliFile, "utf8")))
+            return result == 0
+        finally:
+            dll.graal_tear_down_isolate(isolatethread)

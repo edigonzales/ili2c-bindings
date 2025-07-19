@@ -219,6 +219,13 @@ jobs:
         shell: bash
         run: python -m pip install --upgrade setuptools wheel
 
+      - name: Copy native library
+        shell: bash
+        run: |
+          mkdir -p python/ili2c/lib_ext
+          cp java-lib/build/native/nativeCompile/* python/ili2c/lib_ext/
+          ls -la python/ili2c/lib_ext/
+
       - name: Build Python source package
         if: always() && runner.os == 'Linux'      
         shell: bash
@@ -232,13 +239,6 @@ jobs:
           cd python
           python setup.py bdist_wheel --plat-name=${{matrix.plat-name}}
 
-      - name: Copy native library
-        shell: bash
-        run: |
-          mkdir -p python/ili2c/lib_ext
-          cp java-lib/build/native/nativeCompile/* python/ili2c/lib_ext/
-          ls -la python/ili2c/lib_ext/
-
       - name: Test Package on Linux and macOS
         if: ${{ success() && runner.os != 'Windows' }}
         shell: bash
@@ -248,6 +248,7 @@ jobs:
           source venv/bin/activate
           pip install -e .[test]
           pytest ili2c
+
 
       - name: Test package on Windows
         if: ${{ success() && runner.os == 'Windows' }}

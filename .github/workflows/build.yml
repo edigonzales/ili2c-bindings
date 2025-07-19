@@ -225,7 +225,7 @@ jobs:
         shell: bash
         run: |
           mkdir -p python/lib_ext
-          cp java-lib/build/native/nativeCompile/* lib_ext/
+          cp java-lib/build/native/nativeCompile/* python/lib_ext/
 
       - name: Test Package on Linux and macOS
         if: ${{ success() && runner.os != 'Windows' }}

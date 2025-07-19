@@ -169,6 +169,50 @@ jobs:
           path: nodejs/prebuilds/**
 
   # Stage 3: Build Python bindings
+  build-python:
+    name: 'Build Python Bindings on ${{ matrix.os }}'
+    needs: build-native
+    strategy:
+      fail-fast: true
+      matrix:
+        os: [ macos-14, macos-13, ubuntu-24.04, windows-2022 ]
+        include:
+          - os: 'macos-14'
+            plat-name: 'macosx_14_0_arm64'
+          - os: 'macos-13'
+            plat-name: 'macosx_13_0_x86_64'
+          - os: 'ubuntu-24.04'
+            plat-name: 'manylinux2014_x86_64'
+          - os: 'windows-2022'
+            plat-name: 'win_amd64'
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download native library
+        uses: actions/download-artifact@v4
+        with:
+          name: native-lib-${{ matrix.plat-name }}
+          path: java-lib/build/native/nativeCompile/
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.8'
+
+      - name: Install Python requirements
+        run: python -m pip install --upgrade setuptools wheel
+
+      - name: Build Python source package
+        run: python setup.py sdist
+
+      - name: Build Python package
+        run: python setup.py bdist_wheel --plat-name=${{matrix.plat-name}}
+
+
+
+
 
   # Stage 4: Publish Node.js package
   publish-nodejs:

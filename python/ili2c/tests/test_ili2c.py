@@ -45,17 +45,22 @@ def test_compile_model_fail():
     with tempfile.TemporaryDirectory() as tmpdir:
         print("Temp dir path:", tmpdir)
         log_file = os.path.join(tmpdir, 'ili2c.log')
-        result = Ili2c.compile_model(TEST_DATA_PATH+"Test1.ili", log_file)
-        assert result == False
+        try:
+            result = Ili2c.compile_model(TEST_DATA_PATH+"Test1.ili", log_file)
+            assert result == False
 
-        with open(log_file, 'r', encoding='utf-8') as f:
-            file_content = f.read()
+            with open(log_file, 'r', encoding='utf-8') as f:
+                file_content = f.read()
 
-        search_str = 'found \'XXCLASS\''
-        assert search_str in file_content
-        
-        search_str = '...compiler run failed'
-        assert search_str in file_content
+            search_str = 'found \'XXCLASS\''
+            assert search_str in file_content
+            
+            search_str = '...compiler run failed'
+            assert search_str in file_content
+        finally:
+            # Make sure the log file is explicitly closed and handled before cleanup
+            if os.path.exists(log_file):
+                os.remove(log_file)
 
 def test_pretty_print_ok():
     with tempfile.TemporaryDirectory() as tmpdir:

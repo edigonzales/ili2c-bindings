@@ -2,6 +2,7 @@
 from ili2c import Ili2c
 import os
 import tempfile
+import time
 
 TEST_DATA_PATH = "ili2c/tests/data/"
 

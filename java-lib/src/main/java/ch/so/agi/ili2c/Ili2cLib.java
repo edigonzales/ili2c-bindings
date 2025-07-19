@@ -147,6 +147,7 @@ public class Ili2cLib {
             config = manager.getConfigWithFiles(iliFiles);
         } catch (Ili2cException e) {
             EhiLogger.getInstance().removeListener(fileLogger);
+            fileLogger.close();
             return 1;
         } 
         
@@ -160,11 +161,13 @@ public class Ili2cLib {
         } catch (Ili2cFailure e) {
             EhiLogger.logError("...compiler run failed " + dateOut);
             EhiLogger.getInstance().removeListener(fileLogger);
+            fileLogger.close();
             return 1;
         }
 
         EhiLogger.logState("...compiler run done " + dateOut);
         EhiLogger.getInstance().removeListener(fileLogger);
+        fileLogger.close();
         return 0;
     }
     

@@ -14,13 +14,3 @@ const result = ili2c.compileModel("test/SO_ARP_SEin_Konfiguration_20250115.ili",
 ## Known Issues
 
 ## Release Notes
-
-### 0.0.2 
-
-- First release that compiles ili models.
-
-### 0.0.1
-
-- Initial release of the ili2c wrapper without any function.
-
-

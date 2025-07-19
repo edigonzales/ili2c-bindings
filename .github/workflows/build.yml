@@ -229,7 +229,7 @@ jobs:
           python -m venv venv
           source venv/bin/activate
           pip install -e .[test]
-          pytest ilivalidator
+          pytest ili2c
         shell: bash
 
       - name: Test package on Windows
@@ -240,7 +240,7 @@ jobs:
           python -m venv venv
           venv\Scripts\Activate.ps1
           pip install -e .[test]
-          pytest ilivalidator
+          pytest ili2c
 
 
 

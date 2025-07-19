@@ -242,13 +242,20 @@ jobs:
 
       - name: Test package on Windows
         if: ${{ success() && runner.os == 'Windows' }}
-        shell: bash
         run: |
           cd python
           python -m venv venv
           venv\Scripts\Activate.ps1
           pip install -e .[test]
           pytest ili2c
+
+      - name: 'Upload build artifact'
+        if: ${{ success() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: artifacts
+          path: |
+            dist/
 
 
 

@@ -230,7 +230,6 @@ jobs:
           source venv/bin/activate
           pip install -e .[test]
           pytest ili2c
-        shell: bash
 
       - name: Test package on Windows
         if: ${{ success() && runner.os == 'Windows' }}

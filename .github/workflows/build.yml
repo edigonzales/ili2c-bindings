@@ -370,4 +370,4 @@ jobs:
           #cp -r /home/runner/work/ili2c-node/ili2c-node/artifacts/nodejs-prebuild-linux-x64/* ./prebuilds
           #cp -r /home/runner/work/ili2c-node/ili2c-node/artifacts/nodejs-prebuild-win32-x64/* ./prebuilds
           ls -la ../artifacts/
-          #ls -la ./prebuilds/darwin-arm64
+          ls -la ../artifacts/python-manylinux2014_x86_64

@@ -8,27 +8,31 @@ In this repository, some of the ili2c compiler's Java methods are compiled into 
 
 The repository is organized into three main directories:
 
-- `java-lib/`: Contains the Java code and methods that interact with the ILI2C compiler. These methods are compiled to a native shared library using GraalVM.
+- `java-lib/`: Contains the Java code and methods that interact with the ili2c compiler. These methods are compiled to a native shared library using GraalVM.
 - `nodejs/`: Contains the Node.js bindings for the native shared library.
 - `python/`: Contains the Python bindings for the native shared library.
 
 ## Usage Examples
 
-### Node.js Example
+### Node.js Examples
 
-Here is a basic example of how to use the ILI2C compiler via the Node.js bindings:
+Here are basic examples of how to use the ili2c compiler via the Node.js bindings:
 
 ```javascript
-const ili2c = require('ili2c'); // Import the ili2c binding
+// Compile model
+const ili2c = require('ili2c');
+const result = ili2c.compileModel("test/Test1.ili", "ili2c.log");
+console.log(result);
 
-// Example function to run the compiler
-async function compileILI2C() {
-    try {
-        const result = await ili2c.compile('/path/to/ili/file.ili');
-        console.log('Compilation Result:', result);
-    } catch (error) {
-        console.error('Error during compilation:', error);
-    }
-}
+// Pretty print model
+const ili2c = require('ili2c');
+const result = ili2c.prettyPrint("test/Test1.ili");
+console.log(result);
+```
 
-compileILI2C();
+### Python Example
+
+```python
+
+
+```

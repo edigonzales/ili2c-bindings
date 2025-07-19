@@ -19,6 +19,7 @@ def test_create_ilismetas16_ok():
         search_str = '<IlisMeta16:Role ili:tid="SO_ARP_SEin_Konfiguration_20250115.Grundlagen.Thema_Objektinfo.Thema_R">'
         assert search_str in file_content
 
+# try/finally wohl nicht mehr nötig, weil ich jetzt den FileLogger im Java-Code korrekt schliesse.
 def test_compile_model_ok():
     with tempfile.TemporaryDirectory() as tmpdir:
         print("Temp dir path:", tmpdir)

@@ -179,12 +179,16 @@ jobs:
         include:
           - os: 'macos-14'
             plat-name: 'macosx_14_0_arm64'
+            lib-name: 'darwin-arm64'
           - os: 'macos-13'
             plat-name: 'macosx_13_0_x86_64'
+            lib-name: 'darwin-x64'
           - os: 'ubuntu-24.04'
             plat-name: 'manylinux2014_x86_64'
+            lib-name: 'linux-x64'
           - os: 'windows-2022'
             plat-name: 'win_amd64'
+            lib-name: 'win32-x64'
 
     runs-on: ${{ matrix.os }}
 
@@ -194,7 +198,7 @@ jobs:
       - name: Download native library
         uses: actions/download-artifact@v4
         with:
-          name: native-lib-${{ matrix.plat-name }}
+          name: native-lib-${{ matrix.lib-name }}
           path: java-lib/build/native/nativeCompile/
 
       - uses: actions/setup-python@v5

@@ -32,7 +32,21 @@ console.log(result);
 
 ### Python Example
 
+Here are basic examples of how to use the ili2c compiler via the Python bindings:
+
 ```python
+# Compile model
+from ili2c import Ili2c
+result = Ili2c.compile_model("test/Test1.ili", log_file)
+print(result)
 
+# Pretty print model
+from ili2c import Ili2c
+result = Ili2c.pretty_print("test/Test1.ili")
+print(result)
 
+# Generate model as IlisMeta16 INTERLIS transfer
+from ili2c import Ili2c
+xtf_file = os.path.join(tmpdir, 'Test1.xtf')
+result = Ili2c.create_ilismetas16("test/Test1.ili", xtf_file)
 ```

@@ -367,10 +367,10 @@ jobs:
           cd python
           mkdir dist
           cp -r /home/runner/work/ili2c-node/ili2c-node/artifacts/python-manylinux2014_x86_64/* ./dist
-          cp -r /home/runner/work/ili2c-node/ili2c-node/artifacts/python-macosx_14_0_arm64 /* ./dist
-          cp -r /home/runner/work/ili2c-node/ili2c-node/artifacts/python-macosx_13_0_x86_64 /* ./dist
-          cp -r /home/runner/work/ili2c-node/ili2c-node/artifacts/python-win_amd64 /* ./dist
-          ls -la dist
+          cp -r /home/runner/work/ili2c-node/ili2c-node/artifacts/python-macosx_14_0_arm64/* ./dist
+          cp -r /home/runner/work/ili2c-node/ili2c-node/artifacts/python-macosx_13_0_x86_64/* ./dist
+          cp -r /home/runner/work/ili2c-node/ili2c-node/artifacts/python-win_amd64/* ./dist
+          ls -la ./dist
 
       - name: Publish package to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1

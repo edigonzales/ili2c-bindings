@@ -32,9 +32,22 @@ def test_compile_model_ok():
             search_str = 'Info: ...compiler run done'
             assert search_str in file_content
         finally:
-            # Make sure the log file is explicitly closed and handled before cleanup
+            # Ensure cleanup after test
             if os.path.exists(log_file):
-                os.remove(log_file)
+                try:
+                    # Retry mechanism to handle potential file locks
+                    retries = 5
+                    for _ in range(retries):
+                        try:
+                            os.remove(log_file)
+                            break
+                        except PermissionError:
+                            print("PermissionError while removing log file. Retrying...")
+                            time.sleep(0.5)  # Add a small delay before retrying
+                    else:
+                        print(f"Failed to remove log file after {retries} retries.")
+                except Exception as e:
+                    print(f"Error removing log file: {e}")
 
 def test_compile_model_fail():
     with tempfile.TemporaryDirectory() as tmpdir:
@@ -53,9 +66,22 @@ def test_compile_model_fail():
             search_str = '...compiler run failed'
             assert search_str in file_content
         finally:
-            # Make sure the log file is explicitly closed and handled before cleanup
+            # Ensure cleanup after test
             if os.path.exists(log_file):
-                os.remove(log_file)
+                try:
+                    # Retry mechanism to handle potential file locks
+                    retries = 5
+                    for _ in range(retries):
+                        try:
+                            os.remove(log_file)
+                            break
+                        except PermissionError:
+                            print("PermissionError while removing log file. Retrying...")
+                            time.sleep(0.5)  # Add a small delay before retrying
+                    else:
+                        print(f"Failed to remove log file after {retries} retries.")
+                except Exception as e:
+                    print(f"Error removing log file: {e}")
 
 def test_pretty_print_ok():
     with tempfile.TemporaryDirectory() as tmpdir:

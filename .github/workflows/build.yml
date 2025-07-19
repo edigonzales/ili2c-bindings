@@ -228,7 +228,7 @@ jobs:
         run: |
           mkdir -p python/ili2c/lib_ext
           cp java-lib/build/native/nativeCompile/* python/ili2c/lib_ext/
-          ls -la python/lib_ext/
+          ls -la python/ili2c/lib_ext/
 
       - name: Test Package on Linux and macOS
         if: ${{ success() && runner.os != 'Windows' }}

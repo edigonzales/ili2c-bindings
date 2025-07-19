@@ -3,7 +3,7 @@ from importlib_resources import files
 import platform
 
 if platform.uname()[0] == "Windows":
-    lib_name = "libilivalidator.dll"
+    lib_name = "libili2c.dll"
 elif platform.uname()[0] == "Linux":
     lib_name = "libili2c.so"
 else:

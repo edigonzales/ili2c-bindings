@@ -14,7 +14,18 @@ The repository is organized into three main directories:
 
 ## Dependencies
 
-The native shared library still relies on libc but should work on most (debian/ubuntu) Linux systems, macOS and Windows out of the box.
+The native shared library still relies on _libc_ and _zlib_:
+
+```bash
+ldd libili2c.so
+
+	linux-vdso.so.1 (0x00007f5b53e24000)
+	libz.so.1 => /lib/x86_64-linux-gnu/libz.so.1 (0x00007f5b51974000)
+	libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f5b51600000)
+	/lib64/ld-linux-x86-64.so.2 (0x00007f5b53e26000)
+```
+
+But it should work on most (debian/ubuntu) Linux systems, macOS and Windows out of the box. See: https://www.graalvm.org/latest/reference-manual/native-image/guides/build-static-executables/
 
 ## Usage Examples
 

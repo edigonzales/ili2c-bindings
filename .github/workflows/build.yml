@@ -233,6 +233,23 @@ jobs:
           cp java-lib/build/native/nativeCompile/* python/ili2c/lib_ext/
           ls -la python/ili2c/lib_ext/
 
+      - name: Bump patch version
+        run: |
+          cd python
+          # Read the current version, increment the patch number, and write it back
+          VERSION=$(grep -o "version='[0-9.]*'" setup.py | cut -d"'" -f2)
+          NEW_VERSION=$(echo $VERSION | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g')
+          sed -i "s/version='$VERSION'/version='$NEW_VERSION'/" setup.py
+          echo "Version bumped to ${NEW_VERSION}"
+          
+          # Configure git and commit the change
+          git pull
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add setup.py
+          git commit -m "chore: bump version to ${NEW_VERSION}"
+          git push
+
       - name: Build Python package
         shell: bash
         run: |
@@ -325,6 +342,7 @@ jobs:
       - name: Bump version
         run: |
           cd nodejs
+          git pull
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           npm version patch --no-git-tag-version
@@ -371,22 +389,6 @@ jobs:
           cp -r /home/runner/work/ili2c-bindings/ili2c-bindings/artifacts/python-macosx_13_0_x86_64/* ./dist
           cp -r /home/runner/work/ili2c-bindings/ili2c-bindings/artifacts/python-win_amd64/* ./dist
           ls -la ./dist
-
-      - name: Bump patch version
-        run: |
-          cd python
-          # Read the current version, increment the patch number, and write it back
-          VERSION=$(grep -o "version='[0-9.]*'" setup.py | cut -d"'" -f2)
-          NEW_VERSION=$(echo $VERSION | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g')
-          sed -i "s/version='$VERSION'/version='$NEW_VERSION'/" setup.py
-          echo "Version bumped to ${NEW_VERSION}"
-          
-          # Configure git and commit the change
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git add setup.py
-          git commit -m "chore: bump version to ${NEW_VERSION}"
-          git push
 
       - name: Publish package to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1

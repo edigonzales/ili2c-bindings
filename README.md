@@ -25,7 +25,7 @@ ldd libili2c.so
 	/lib64/ld-linux-x86-64.so.2 (0x00007f5b53e26000)
 ```
 
-But it should work on most (debian/ubuntu) Linux systems, macOS and Windows out of the box. See: https://www.graalvm.org/latest/reference-manual/native-image/guides/build-static-executables/
+But it should work on most Linux systems, macOS (amd64 _and_ arm64) and Windows out of the box. See: https://www.graalvm.org/latest/reference-manual/native-image/guides/build-static-executables/
 
 ## Usage Examples
 

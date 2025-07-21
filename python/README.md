@@ -43,5 +43,5 @@ pip install -e .[test]
 ### Running tests
 
 ```
-pytest ilivalidator
+pytest ili2c
 ```

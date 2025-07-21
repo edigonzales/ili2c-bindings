@@ -11,7 +11,7 @@ else:
 
 class Ili2c:
     @staticmethod
-    def create_ilismetas16(iliFile: str, xtfFile: str) -> bool:
+    def create_ilismeta16(iliFile: str, xtfFile: str) -> bool:
         lib_path = files('ili2c.lib_ext').joinpath(lib_name)
         # str() seems to be necessary on windows: https://github.com/TimDettmers/bitsandbytes/issues/30
         dll = CDLL(str(lib_path))

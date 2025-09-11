@@ -49,6 +49,17 @@ public class Ili2cLibTest {
         String expected = Files.readString(Paths.get("src/test/data/SO_ARP_SEin_Konfiguration_20250116_expected.ili"));
         assertEquals(expected.trim(), content.trim());
     }
+    
+    @Test
+    public void compileModel_ImportLocalModel() throws IOException {
+        // Prepare
+        Path logFile = tempDirectory.toPath().resolve("ili2c.log");
+
+        // Execute
+        int ret = Ili2cLib.compileModelImpl("src/test/data/SO_ARP_SEin_Konfiguration_20250115.ili", logFile.toAbsolutePath().toString());
+
+        
+    }
 
     @Test 
     public void compileModel_NotValid() throws IOException {

@@ -13,7 +13,7 @@ INTERLIS 2.3;
 MODEL SO_ARP_SEin_Konfiguration_20250115 (de)
 AT "https://arp.so.ch"
 VERSION "2025-01-15"  =
-  IMPORTS GeometryCHLV95_V1,Text;
+  IMPORTS GeometryCHLV95_V1,Text, Foo;
 
   CLASS Gemeinde (ABSTRACT) =
     /** Name der Gemeinde (gemäss amtlichem Verzeichnis)

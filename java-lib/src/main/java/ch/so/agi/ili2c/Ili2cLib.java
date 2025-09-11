@@ -24,6 +24,8 @@ import ch.interlis.ili2c.Ili2cFailure;
 import ch.interlis.ili2c.Ili2cSettings;
 import ch.interlis.ili2c.ModelScan;
 import ch.interlis.ili2c.config.Configuration;
+import ch.interlis.ili2c.config.FileEntry;
+import ch.interlis.ili2c.config.FileEntryKind;
 import ch.interlis.ili2c.generator.Imd16Generator;
 import ch.interlis.ili2c.generator.Interlis2Generator;
 import ch.interlis.ili2c.metamodel.Ili2cMetaAttrs;
@@ -137,32 +139,46 @@ public class Ili2cLib {
         EhiLogger.logState("ili2c-"+TransferDescription.getVersion());
         EhiLogger.logState("ilifile <" + iliFile + ">");
         
-        IliManager manager = new IliManager();        
-        manager.setRepositories(Ili2cSettings.DEFAULT_ILIDIRS.split(";"));
-        //manager.setRepositories(ilidirs.split(";"));
-        ArrayList<String> iliFiles = new ArrayList<String>();        
-        iliFiles.add(iliFile);
-        Configuration config;
-        try {
-            config = manager.getConfigWithFiles(iliFiles);
-        } catch (Ili2cException e) {
-            EhiLogger.getInstance().removeListener(fileLogger);
-            fileLogger.close();
-            return 1;
-        } 
         
+        Ili2cSettings set = new Ili2cSettings();
+        ch.interlis.ili2c.Main.setDefaultIli2cPathMap(set);
+        set.setIlidirs(Ili2cSettings.DEFAULT_ILIDIRS);
+
+        Configuration cfg = new Configuration();
+        cfg.addFileEntry(new FileEntry(iliFile, FileEntryKind.ILIMODELFILE));
+        cfg.setAutoCompleteModelList(true);
+        cfg.setGenerateWarnings(true);
+
         DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date today = new Date();
         String dateOut = dateFormatter.format(today);
+
+//        TransferDescription td = ch.interlis.ili2c.Main.runCompiler(cfg, set, null);
+//        IliManager manager = new IliManager();        
+//        manager.setRepositories(Ili2cSettings.DEFAULT_ILIDIRS.split(";"));
+//        //manager.setRepositories(ilidirs.split(";"));
+//        ArrayList<String> iliFiles = new ArrayList<String>();        
+//        iliFiles.add(iliFile);
+//        Configuration config;
+//        try {
+//            config = manager.getConfigWithFiles(iliFiles);
+//        } catch (Ili2cException e) {
+//            EhiLogger.getInstance().removeListener(fileLogger);
+//            fileLogger.close();
+//            return 1;
+//        } 
         
-        TransferDescription td = null;
-        try {
-            td = ch.interlis.ili2c.Ili2c.runCompiler(config);
-        } catch (Ili2cFailure e) {
+//        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//        Date today = new Date();
+//        String dateOut = dateFormatter.format(today);
+        
+        TransferDescription td = ch.interlis.ili2c.Main.runCompiler(cfg, set, null);
+
+        if (td == null) {
             EhiLogger.logError("...compiler run failed " + dateOut);
             EhiLogger.getInstance().removeListener(fileLogger);
             fileLogger.close();
-            return 1;
+            return 1;   
         }
 
         EhiLogger.logState("...compiler run done " + dateOut);

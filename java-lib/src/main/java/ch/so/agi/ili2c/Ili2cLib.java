@@ -137,7 +137,7 @@ public class Ili2cLib {
         EhiLogger.getInstance().addListener(fileLogger);
 
         EhiLogger.logState("ili2c-"+TransferDescription.getVersion());
-        EhiLogger.logState("ilifile <" + iliFile + ">");
+        //EhiLogger.logState("ilifile <" + iliFile + ">");
         
         
         Ili2cSettings set = new Ili2cSettings();

@@ -46,6 +46,11 @@ public class Ili2cLibTest {
         // Validate
         assertEquals(0, ret);
         String content = Files.readString(target);
+        
+        
+        System.out.println(content);
+        
+        
         String expected = Files.readString(Paths.get("src/test/data/SO_ARP_SEin_Konfiguration_20250116_expected.ili"));
         assertEquals(expected.trim(), content.trim());
     }

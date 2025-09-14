@@ -2,9 +2,9 @@
 # https://docs.gradle.org/current/userguide/platforms.html#sub::toml-dependencies-format
 
 [versions]
-ili2cCoreVersion = "5.6.3"
-ili2cToolVersion = "5.6.3"
-ioxIliVersion = "1.24.0"
+ili2cCoreVersion = "5.6.6"
+ili2cToolVersion = "5.6.6"
+ioxIliVersion = "1.24.1"
 ehibasicsVersion = "1.4.1"
 antlrVersion = "2.7.7"
 junit-jupiter = "5.12.1"
